@@ -36,6 +36,7 @@ dev_dependencies:
   flutter_launcher_icons: ^0.9.2
   flutter_lints: ^2.0.1
   test: ^1.19.0
+  path_provider: ^2.0.1
 
 flutter:
   uses-material-design: true
@@ -44,6 +45,7 @@ flutter:
     - assets/images/
     - assets/music/
     - assets/sfx/
+    - assets/1/
 
   fonts:
     - family: Permanent Marker

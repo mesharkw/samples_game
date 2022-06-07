@@ -23,76 +23,96 @@ class MainMenuScreen extends StatelessWidget {
     final settingsController = context.watch<SettingsController>();
     final audioController = context.watch<AudioController>();
 
-    return Scaffold(
-      backgroundColor: palette.backgroundMain,
-      body: ResponsiveScreen(
-        mainAreaProminence: 0.45,
-        squarishMainArea: Center(
-          child: Transform.rotate(
-            angle: -0.1,
-            child: const Text(
-              'Flutter Game Template!',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: 'Permanent Marker',
-                fontSize: 55,
-                height: 1,
+    return Stack(
+      children: <Widget>[
+        Scaffold(
+          backgroundColor: palette.backgroundMain,
+          body: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("assets/images/background.png"),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: ResponsiveScreen(
+              mainAreaProminence: 0.45,
+              squarishMainArea: Center(
+                child: Transform.rotate(
+                  angle: -0.1,
+                  child: Image.asset(
+                    "assets/images/logo.png",
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              rectangularMenuArea: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      audioController.playSfx(SfxType.buttonTap);
+                      GoRouter.of(context).go('/play');
+                    },
+
+                    style: ElevatedButton.styleFrom(
+                      primary: palette.trueTeal,),
+                    child: const Text('Play', style: TextStyle(
+                      fontFamily: 'Permanent Marker',
+                      fontSize: 55,
+                      height: 1,
+                    ),),
+                  ),
+                  _gap,
+                  if (gamesServicesController != null) ...[
+                    _hideUntilReady(
+                      ready: gamesServicesController.signedIn,
+                      child: ElevatedButton(
+                        onPressed: () => gamesServicesController.showAchievements(),
+                        child: const Text('Achievements'),
+                      ),
+                    ),
+                    _gap,
+                    _hideUntilReady(
+                      ready: gamesServicesController.signedIn,
+                      child: ElevatedButton(
+                        onPressed: () => gamesServicesController.showLeaderboard(),
+                        child: const Text('Leaderboard'),
+                      ),
+                    ),
+                    _gap,
+                  ],
+                  ElevatedButton(
+                    onPressed: () => GoRouter.of(context).go('/settings'),
+                    style: ElevatedButton.styleFrom(
+                        primary: palette.trueTeal,),
+                    child: const Text('Settings', style: TextStyle(
+                      fontFamily: 'Permanent Marker',
+                      fontSize: 55,
+                      height: 1,
+                    ),),
+                  ),
+                  _gap,
+                  Padding(
+                    padding: const EdgeInsets.only(top: 32),
+                    child: ValueListenableBuilder<bool>(
+                      valueListenable: settingsController.muted,
+                      builder: (context, muted, child) {
+                        return IconButton(
+                          onPressed: () => settingsController.toggleMuted(),
+                          icon: Icon(muted ? Icons.volume_off : Icons.volume_up),
+                        );
+                      },
+                    ),
+                  ),
+                  _gap,
+                ],
               ),
             ),
           ),
         ),
-        rectangularMenuArea: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                audioController.playSfx(SfxType.buttonTap);
-                GoRouter.of(context).go('/play');
-              },
-              child: const Text('Play'),
-            ),
-            _gap,
-            if (gamesServicesController != null) ...[
-              _hideUntilReady(
-                ready: gamesServicesController.signedIn,
-                child: ElevatedButton(
-                  onPressed: () => gamesServicesController.showAchievements(),
-                  child: const Text('Achievements'),
-                ),
-              ),
-              _gap,
-              _hideUntilReady(
-                ready: gamesServicesController.signedIn,
-                child: ElevatedButton(
-                  onPressed: () => gamesServicesController.showLeaderboard(),
-                  child: const Text('Leaderboard'),
-                ),
-              ),
-              _gap,
-            ],
-            ElevatedButton(
-              onPressed: () => GoRouter.of(context).go('/settings'),
-              child: const Text('Settings'),
-            ),
-            _gap,
-            Padding(
-              padding: const EdgeInsets.only(top: 32),
-              child: ValueListenableBuilder<bool>(
-                valueListenable: settingsController.muted,
-                builder: (context, muted, child) {
-                  return IconButton(
-                    onPressed: () => settingsController.toggleMuted(),
-                    icon: Icon(muted ? Icons.volume_off : Icons.volume_up),
-                  );
-                },
-              ),
-            ),
-            _gap,
-            const Text('Music by Mr Smith'),
-            _gap,
-          ],
-        ),
-      ),
+      ],
     );
   }
 

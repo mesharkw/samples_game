@@ -172,10 +172,10 @@ To enable ads in your game:
    entry called `GADApplicationIdentifier`,
    and update the value with the _App ID_ of the iOS AdMob app.
    
-   ```xml
+   xml
    <key>GADApplicationIdentifier</key>
    <string>ca-app-pub-1234567890123456~0987654321</string>
-   ```
+   
 6. Back in [AdMob][], create an _Ad unit_ for each of the AdMob apps.
    This asks for the Ad unit's format (Banner, Interstitial, Rewarded).
    The template is set up for a Banner ad unit, so select that if you
@@ -292,12 +292,12 @@ severe log messages in
 To test, add a button to your project, and throw whatever
 exception you like when the player presses it.
 
-```dart
+
 TextButton(
   onPressed: () => throw StateError('whoa!'),
   child: Text('Test Crashlytics'),
 )
-```
+
 
 
 ## Games Services (Game Center & Play Games Services)
@@ -346,7 +346,7 @@ To enable _Play Games Services_ on Android:
     _Credentials_. Find a button that says _'Get resources'_.
     You get an XML file with the _Play Games Services_ IDs.
    
-    ```xml
+   
     <?xml version="1.0" encoding="utf-8"?>
     <!--Google Play game services IDs. Save this file as res/values/games-ids.xml in your project.-->
     <resources>
@@ -359,7 +359,7 @@ To enable _Play Games Services_ on Android:
         <!--leaderboard Highest Score-->
         <string name="leaderboard_highest_score" translatable="false">sOmEiDsTrInG</string>
     </resources>
-    ```
+   
 6. Replace the file at `android/app/src/main/res/values/games-ids.xml`
    with the XML you received in the previous step.
 
@@ -372,42 +372,40 @@ and have your achievement & leaderboard IDs ready, it's finally Dart time.
 1. Open `lib/src/games_services/games_services.dart` and edit the leaderboard
    IDs in the `showLeaderboard()` function.
    
-   ```dart
    // TODO: When ready, change both these leaderboard IDs.
    iOSLeaderboardID: "some_id_from_app_store",
    androidLeaderboardID: "sOmE_iD_fRoM_gPlAy",
-   ```
+   
 2. The `awardAchievement()` function in the same file takes the IDs
     as arguments. You can therefore call it from anywhere
     in your game like this:
    
-    ```dart
+   
     final gamesServicesController = context.read<GamesServicesController?>();
     await gamesServicesController?.awardAchievement(
         iOS: 'an_achievement_id',
         android: 'aNaChIeVeMenTiDfRoMgPlAy',
     );
-    ```
+   
    
     You might want to attach the achievement IDs to levels, enemies,
     places, items, and so on. For example, the template has levels
     defined in `lib/src/level_selection/levels.dart` like so:
    
-    ```dart
+   
     GameLevel(
       number: 1,
       difficulty: 5,
       achievementIdIOS: 'first_win',
       achievementIdAndroid: 'sOmEtHinG',
     ),
-    ```
+ 
    
     That way, after the player reaches a level, we check if the level
     has non-null achievement IDs, and if so, we call `awardAchievement()`
     with those IDs.
 3. Uncomment the code relating to games services in `lib/main.dart`.
    
-    ```dart
     // TODO: When ready, uncomment the following lines.
 
     GamesServicesController? gamesServicesController;
@@ -416,7 +414,6 @@ and have your achievement & leaderboard IDs ready, it's finally Dart time.
     //     // Attempt to log the player in.
     //     ..initialize();
     // } 
-    ```
    
 If at any point you feel lost, there's a [How To][] guide written by the author
 of `package:games_services`. Some of the guide's instructions and screenshots
